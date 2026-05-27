@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Gut Quiz — Calculate Your Exit Efficiency Score | DUMPS</title>
+  <meta name="description" content="Are you Ghost Wipe certified or is your plumbing a critical system failure? Take the Gut Quiz to calculate your Exit Efficiency Score." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── DESIGN TOKENS (Navy Slate system) ── */
+    :root {
+      --navy:        #2E3842;
+      --navy-dark:   #1e2830;
+      --navy-deeper: #141c23;
+      --navy-mid:    #3a4855;
+      --orange:      #E85D04;
+      --orange-glow: rgba(232,93,4,0.25);
+      --orange-tint: rgba(232,93,4,0.08);
+      --grey:        #6B6B6B;
+      --light-grey:  #AAAAAA;
+      --white:       #FFFFFF;
+      --light:       #F2F2F2;
+      --success:     #38b000;
+      --error:       #d00000;
+      --border:      rgba(255,255,255,0.07);
+      --border-mid:  rgba(255,255,255,0.12);
+
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body:    'Inter', Arial, sans-serif;
+      --font-mono:    'Courier New', Courier, monospace;
+      --ease:         cubic-bezier(0.16,1,0.3,1);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy-deeper);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── TACTICAL GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(to right,  rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    #nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      border-bottom: 2px solid var(--orange);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo img { height: 34px; width: auto; display: block; }
+    .nav-system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--light-grey);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      flex-shrink: 0;
+    }
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--grey);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border-mid);
+      padding: 6px 12px;
+      border-radius: 3px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-back:hover { color: var(--white); border-color: var(--orange); }
+
+    /* ── LAYOUT ── */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* ── SCREEN TRANSITIONS ── */
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .screen.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ════════════════════════════════
+       START SCREEN
+    ════════════════════════════════ */
+    .start-wrapper {
+      max-width: 620px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hazard-banner {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--orange), var(--orange) 10px,
+        var(--navy-dark) 10px, var(--navy-dark) 20px
+      );
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 9px 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--orange);
+      text-shadow: 1px 1px 2px #000;
+      margin-bottom: 0;
+    }
+    .start-card {
+      background: var(--navy);
+      border: 1px solid var(--border-mid);
+      border-top: none;
+      border-bottom: 4px solid var(--orange);
+      padding: 44px 40px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+    .start-title {
+      font-family: var(--font-display);
+      font-size: 7rem;
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+    .start-subtitle-label {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .start-desc {
+      font-size: 1.25rem;
+      color: var(--light-grey);
+      margin-bottom: 32px;
+      line-height: 1.65;
+    }
+    .manifesto-card {
+      border-left: 3px solid var(--orange);
+      background: rgba(255,255,255,0.02);
+      padding: 24px 26px;
+      text-align: left;
+      margin-bottom: 36px;
+    }
+    .manifesto-card p {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--light-grey);
+      line-height: 1.8;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .score-preview {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+    .score-chip {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border-mid);
+      border-radius: 2px;
+      color: var(--grey);
+    }
+    .score-chip.chip-red    { border-color: var(--error);   color: var(--error); }
+    .score-chip.chip-grey   { border-color: var(--grey);    color: var(--grey); }
+    .score-chip.chip-green  { border-color: var(--success); color: var(--success); }
+
+    /* ════════════════════════════════
+       QUIZ SCREEN
+    ════════════════════════════════ */
+    .quiz-card {
+      background: var(--navy);
+      border: 1px solid var(--border-mid);
+      border-top: 4px solid var(--grey);
+      padding: 44px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+      max-width: 720px;
+      margin: 0 auto;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+    .progress-fraction {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--orange);
+    }
+    .progress-track {
+      height: 5px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--orange);
+      box-shadow: 0 0 10px var(--orange-glow);
+      transition: width 0.4s var(--ease);
+      width: 10%;
+    }
+    .question-category {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .question-text {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 32px;
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      background: var(--navy-dark);
+      border: 1px solid var(--border-mid);
+      color: var(--light-grey);
+      padding: 20px 24px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.18s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .option-btn:hover, .option-btn:focus-visible {
+      border-color: var(--orange);
+      color: var(--white);
+      background: rgba(232,93,4,0.04);
+      box-shadow: inset 3px 0 0 var(--orange);
+      outline: none;
+    }
+    .option-btn:active { background: rgba(232,93,4,0.09); }
+    .option-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.18s;
+    }
+    .option-btn:hover .option-tag { color: var(--orange); }
+
+    /* ════════════════════════════════
+       RESULTS SCREEN
+    ════════════════════════════════ */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      background: var(--navy);
+      border: 1px solid var(--border-mid);
+      padding: 44px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+    .results-main { display: flex; flex-direction: column; }
+
+    .tier-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--error);
+      border: 1px solid var(--error);
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .results-heading {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    /* Speedometer Gauge */
+    .gauge-wrapper {
+      position: relative;
+      width: 280px;
+      height: 170px;
+      margin: 0 auto 32px;
+    }
+    .gauge { position: relative; width: 100%; height: 100%; }
+    .gauge-arc { width: 100%; height: 100%; }
+    .gauge-bg { stroke: rgba(255,255,255,0.07); }
+    .gauge-fill {
+      stroke: var(--orange);
+      stroke-dasharray: 126;
+      stroke-dashoffset: 126;
+      transition: stroke-dashoffset 1.2s var(--ease);
+    }
+    .gauge-needle-wrapper {
+      position: absolute;
+      bottom: 0; left: 50%;
+      width: 0; height: 0;
+      transform: translate(-50%,0) rotate(var(--needle-deg,-90deg));
+      transition: transform 1.2s var(--ease);
+    }
+    .gauge-needle {
+      position: absolute;
+      bottom: 0; left: -3px;
+      width: 6px; height: 110px;
+      background: var(--orange);
+      border-radius: 3px 3px 0 0;
+      transform-origin: bottom center;
+      box-shadow: 0 0 12px var(--orange-glow);
+    }
+    .gauge-needle::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: -10px;
+      width: 20px; height: 20px;
+      background: var(--orange);
+      border-radius: 50%;
+      border: 3px solid var(--navy);
+    }
+    .gauge-score-display {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+    }
+    .score-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: var(--white);
+      line-height: 1;
+    }
+    .score-max {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--grey);
+      margin-left: 4px;
+    }
+
+    /* Feedback block */
+    .feedback-block {
+      border-left: 3px solid var(--orange);
+      background: var(--navy-dark);
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+    .tier-status {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .feedback-text {
+      font-size: 0.92rem;
+      color: var(--light-grey);
+      line-height: 1.65;
+    }
+
+    /* Lead capture */
+    .lead-card {
+      background: var(--navy-dark);
+      border: 1px solid var(--border-mid);
+      border-top: 3px solid var(--orange);
+      padding: 28px;
+    }
+    .lead-heading {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .lead-desc {
+      font-size: 0.88rem;
+      color: var(--light-grey);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .email-input {
+      background: var(--navy);
+      border: 1px solid var(--border-mid);
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 14px 16px;
+      outline: none;
+      border-radius: 3px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      letter-spacing: 0.05em;
+    }
+    .email-input::placeholder { color: rgba(255,255,255,0.25); }
+    .email-input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 10px var(--orange-tint);
+    }
+    .form-error {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--error);
+      letter-spacing: 0.06em;
+      min-height: 16px;
+    }
+
+    /* Coupon card */
+    .coupon-card {
+      border: 2px dashed var(--success);
+      background: rgba(56,176,0,0.03);
+      padding: 32px;
+      text-align: center;
+      animation: zoomIn 0.4s var(--ease);
+    }
+    .coupon-card.hidden { display: none; }
+    .coupon-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--success);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .coupon-code {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--navy-dark);
+      border: 1px solid var(--border-mid);
+      padding: 12px 24px;
+      display: inline-block;
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+    }
+    .coupon-instructions {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--grey);
+      letter-spacing: 0.06em;
+      margin-bottom: 24px;
+    }
+
+    /* Sidebar */
+    .results-sidebar {
+      border-left: 1px solid var(--border-mid);
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--grey);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rec-card {
+      background: var(--navy-dark);
+      border: 1px solid var(--border-mid);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .rec-img-box {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--navy-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .rec-img-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+    .rec-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .rec-flavor {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--orange);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .rec-features {
+      list-style: none;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 22px;
+    }
+    .rec-features li {
+      color: var(--light-grey);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .rec-features li::before { content: '+ '; color: var(--orange); }
+    .rec-tagline {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--grey);
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      letter-spacing: 1px;
+      font-size: 1.2rem;
+      padding: 15px 32px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+      border: 1px solid var(--orange);
+    }
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--navy-dark);
+      border-color: var(--white);
+      box-shadow: 0 0 18px var(--orange-glow);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--orange);
+      border: 1.5px solid var(--orange);
+    }
+    .btn-outline:hover {
+      background: var(--orange);
+      color: var(--white);
+      box-shadow: 0 0 18px var(--orange-glow);
+    }
+    .btn-block { width: 100%; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 2px solid var(--navy);
+      background: var(--navy-darker, #111820);
+      padding: 28px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--grey);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .results-grid {
+        grid-template-columns: 1fr;
+        padding: 28px 20px;
+      }
+      .results-sidebar {
+        border-left: none;
+        border-top: 1px solid var(--border-mid);
+        padding-left: 0;
+        padding-top: 28px;
+      }
+    }
+    @media (max-width: 580px) {
+      main { margin: 20px auto; }
+      .quiz-card, .start-card { padding: 28px 20px; }
+      .start-title { font-size: 4.5rem; }
+      .question-text { font-size: 1.35rem; }
+      .results-grid { padding: 24px 16px; }
+      .results-heading { font-size: 2.2rem; }
+      .option-btn { padding: 16px 18px; font-size: 0.92rem; }
+      .gauge-wrapper { width: 220px; height: 135px; }
+      .gauge-needle { height: 86px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAV ══ -->
+  <nav id="nav">
+    <a href="../" class="nav-logo">
+      <img src="../dumps_logo_orange.png" alt="DUMPS" />
+    </a>
+    <div class="nav-system-status">
+      <div class="status-dot"></div>
+      <span>Systems: Online</span>
+    </div>
+    <a href="../" class="nav-back">← Back to Site</a>
+  </nav>
+
+  <main>
+
+    <!-- ══════════════════════════════
+         SCREEN 1: START
+    ══════════════════════════════ -->
+    <section id="start-screen" class="screen active">
+      <div class="start-wrapper">
+        <div class="hazard-banner">⚠ Warning: Unoptimized Cargo Detected</div>
+        <div class="start-card">
+          <div class="start-title">GUT AUDIT</div>
+          <div class="start-subtitle-label">Ultimate Exit Efficiency Assessment</div>
+          <p class="start-desc">4 questions. 60 seconds. Find out if your plumbing is a precision machine or a national embarrassment.</p>
+
+          <div class="manifesto-card">
+            <p>"Everybody dumps. Most people are bad at it. Men track sleep, macros, and PRs. Then they spend 12 minutes wiping like they're getting peanut butter out of shag carpet. We engineer the source."</p>
+          </div>
+
+          <div class="score-preview">
+            <span class="score-chip chip-red">0–39: Critical Failure</span>
+            <span class="score-chip chip-grey">40–79: Unoptimized</span>
+            <span class="score-chip chip-green">80–100: Ghost Wipe Certified</span>
+          </div>
+
+          <button id="start-quiz-btn" class="btn btn-primary">INITIALIZE AUDIT →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         SCREEN 2: QUIZ
+    ══════════════════════════════ -->
+    <section id="quiz-screen" class="screen">
+      <div class="quiz-card">
+        <div class="progress-row">
+          <span class="progress-label">Audit Progress</span>
+          <span class="progress-fraction" id="progress-fraction">1 / 4</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="question-category" id="question-category">Category: Exit Efficiency</div>
+        <h2 class="question-text" id="question-text">How many wipes does it take to get a clean exit?</h2>
+        <div class="options-list" id="options-container"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         SCREEN 3: RESULTS
+    ══════════════════════════════ -->
+    <section id="results-screen" class="screen">
+      <div class="results-grid">
+
+        <!-- LEFT: Score + Feedback + Lead Capture -->
+        <div class="results-main">
+          <span class="tier-badge" id="tier-badge">Critical System Failure</span>
+          <h2 class="results-heading">Your Exit<br>Efficiency Score</h2>
+
+          <!-- Gauge -->
+          <div class="gauge-wrapper">
+            <div class="gauge">
+              <svg class="gauge-arc" viewBox="0 0 100 50">
+                <path class="gauge-bg"   d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round"/>
+                <path class="gauge-fill" id="gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round"/>
+              </svg>
+              <div class="gauge-needle-wrapper" id="gauge-needle">
+                <div class="gauge-needle"></div>
+              </div>
+              <div class="gauge-score-display">
+                <span class="score-num" id="score-num">0</span>
+                <span class="score-max">/100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback -->
+          <div class="feedback-block">
+            <div class="tier-status" id="tier-status">Status: Critical Pipeline Failure</div>
+            <p class="feedback-text" id="feedback-text">Your exit efficiency is in the red. Your GI tract is a swamp. We need to fix the source.</p>
+          </div>
+
+          <!-- Email Capture -->
+          <div class="lead-card" id="lead-card">
+            <div class="lead-heading">Unlock Your Remedy</div>
+            <p class="lead-desc">Enter your email to receive your diagnostic breakdown, clean-exit protocol, and a discount code to fix your exits.</p>
+            <form id="email-form">
+              <div class="input-row">
+                <input type="email" id="user-email" class="email-input" placeholder="ENTER COMM-LINK (EMAIL)" required />
+                <button type="submit" class="btn btn-outline">GET DISCOUNT CODE</button>
+              </div>
+              <div class="form-error" id="form-error"></div>
+            </form>
+          </div>
+
+          <!-- Coupon (hidden until email submitted) -->
+          <div class="coupon-card hidden" id="coupon-card">
+            <div class="coupon-label">✓ Discount Unlocked</div>
+            <div class="coupon-code" id="coupon-code">FIXMYEXIT</div>
+            <p class="coupon-instructions">Enter this code at checkout to claim your remedy.</p>
+            <a href="../" class="btn btn-primary btn-block">REDEEM NOW →</a>
+          </div>
+        </div>
+
+        <!-- RIGHT: Product Recommendation -->
+        <aside class="results-sidebar">
+          <div class="sidebar-label">Engineering Recommendation</div>
+          <div class="rec-card">
+            <div class="rec-img-box">
+              <img src="../dumps_packaging_with_logo.png" alt="Dumps Daily — Yellow Alert" />
+            </div>
+            <div class="rec-name">DUMPS DAILY</div>
+            <div class="rec-flavor">⚡ Yellow Alert — Lemon Lime</div>
+            <ul class="rec-features">
+              <li>7.5g Pure Psyllium Husk</li>
+              <li>5g Active Soluble Fiber</li>
+              <li>Stevia Sweetened — Zero Sugar</li>
+              <li>60 Servings / 2-Month Supply</li>
+              <li>Ghost Wipe Guaranteed</li>
+            </ul>
+            <a href="../" class="btn btn-primary btn-block" style="margin-bottom:12px;">Get the Jar — $34.99 →</a>
+            <a href="../" class="btn btn-outline btn-block" style="font-size:1rem;">Subscribe & Save — $29.74</a>
+            <p class="rec-tagline">"The morning alarm you actually want."</p>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>DUMPS Industrial Gut Products © 2026. All Rights Reserved.</p>
+    <p>These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+  </footer>
+
+  <script>
+    // ══ QUESTION DATA ══
+    const questions = [
+      {
+        category: "Exit Efficiency",
+        question: "How many wipes does it take to get a clean exit?",
+        options: [
+          { text: "1 wipe — The Mythic Ghost Wipe",                      score: 100 },
+          { text: "2–3 wipes — Acceptable civilian",                      score: 75  },
+          { text: "4–6 wipes — System warning",                          score: 40  },
+          { text: "7+ wipes — Like cleaning peanut butter out of carpet", score: 10  }
+        ]
+      },
+      {
+        category: "Throne Time",
+        question: "How long are you spending on the throne per session?",
+        options: [
+          { text: "Under 2 minutes — Efficient Operation",              score: 100 },
+          { text: "2–5 minutes — Standard Operation",                   score: 80  },
+          { text: "5–10 minutes — System Lag",                         score: 50  },
+          { text: "10+ minutes — Legs are asleep, read three articles", score: 15  }
+        ]
+      },
+      {
+        category: "Certainty Factor",
+        question: "How often do you feel like the job wasn't fully finished?",
+        options: [
+          { text: "Never. Clean breaks only.",              score: 100 },
+          { text: "Occasionally. Unfinished business.",     score: 70  },
+          { text: "Frequently. The phantom marker strikes.", score: 35  },
+          { text: "Always. I live in constant doubt.",      score: 10  }
+        ]
+      },
+      {
+        category: "Fuel Intake",
+        question: "What is your current daily fiber situation?",
+        options: [
+          { text: "Optimized — High-fiber diet, clean greens daily",          score: 100 },
+          { text: "Standard — Average diet, occasionally a vegetable",         score: 60  },
+          { text: "Unoptimized — Protein, processed carbs, energy drinks",    score: 20  },
+          { text: "Zero — What is fiber?",                                     score: 5   }
+        ]
+      }
+    ];
+
+    // ══ STATE ══
+    let currentIdx = 0;
+    let answers    = [];
+    let finalScore = 0;
+
+    // ══ DOM REFS ══
+    const startScreen   = document.getElementById('start-screen');
+    const quizScreen    = document.getElementById('quiz-screen');
+    const resultsScreen = document.getElementById('results-screen');
+
+    const startBtn        = document.getElementById('start-quiz-btn');
+    const progressFill    = document.getElementById('progress-fill');
+    const progressFraction = document.getElementById('progress-fraction');
+    const qCategory       = document.getElementById('question-category');
+    const qText           = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+
+    const tierBadge   = document.getElementById('tier-badge');
+    const gaugeFill   = document.getElementById('gauge-fill');
+    const gaugeNeedle = document.getElementById('gauge-needle');
+    const scoreNum    = document.getElementById('score-num');
+    const tierStatus  = document.getElementById('tier-status');
+    const feedbackText = document.getElementById('feedback-text');
+
+    const leadCard    = document.getElementById('lead-card');
+    const couponCard  = document.getElementById('coupon-card');
+    const emailForm   = document.getElementById('email-form');
+    const emailInput  = document.getElementById('user-email');
+    const formError   = document.getElementById('form-error');
+    const couponCode  = document.getElementById('coupon-code');
+
+    // ══ EVENTS ══
+    startBtn.addEventListener('click', startQuiz);
+    emailForm.addEventListener('submit', handleEmailSubmit);
+
+    // ══ FUNCTIONS ══
+    function switchScreen(from, to) {
+      from.classList.remove('active');
+      setTimeout(() => to.classList.add('active'), 240);
+    }
+
+    function startQuiz() {
+      switchScreen(startScreen, quizScreen);
+      setTimeout(() => loadQuestion(0), 260);
+    }
+
+    function loadQuestion(idx) {
+      if (idx >= questions.length) { calculateResults(); return; }
+
+      currentIdx = idx;
+      const q = questions[idx];
+
+      // Progress
+      const pct = Math.max(((idx) / questions.length) * 100, 10);
+      progressFill.style.width = pct + '%';
+      progressFraction.textContent = (idx + 1) + ' / ' + questions.length;
+
+      // Content
+      qCategory.textContent = 'Category: ' + q.category;
+      qText.textContent     = q.question;
+
+      // Options
+      optionsContainer.innerHTML = '';
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = `<span>${opt.text}</span><span class="option-tag">[ SELECT ]</span>`;
+        btn.addEventListener('click', () => pickOption(opt.score));
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function pickOption(score) {
+      answers.push(score);
+      const card = document.querySelector('.quiz-card');
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-10px)';
+      setTimeout(() => {
+        loadQuestion(currentIdx + 1);
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 240);
+    }
+
+    function calculateResults() {
+      finalScore = Math.round(answers.reduce((s, v) => s + v, 0) / questions.length);
+      switchScreen(quizScreen, resultsScreen);
+      setTimeout(() => {
+        animateGauge(finalScore);
+        renderTier(finalScore);
+      }, 260);
+    }
+
+    function animateGauge(score) {
+      // Needle: -90deg = 0, +90deg = 100
+      const deg = -90 + (score / 100) * 180;
+      gaugeNeedle.style.setProperty('--needle-deg', deg + 'deg');
+
+      // Arc fill
+      const offset = 126 - (score / 100) * 126;
+      gaugeFill.style.strokeDashoffset = offset;
+
+      // Count-up
+      let display = 0;
+      if (score === 0) { scoreNum.textContent = '0'; return; }
+      const step = 1200 / score;
+      const timer = setInterval(() => {
+        display++;
+        scoreNum.textContent = display;
+        if (display >= score) clearInterval(timer);
+      }, step);
+    }
+
+    function renderTier(score) {
+      if (score <= 39) {
+        setBadge('Critical System Failure', 'var(--error)');
+        tierStatus.textContent  = 'Status: Critical Pipeline Failure';
+        feedbackText.textContent = 'Your exit efficiency is in the red. You are wasting a significant portion of your week in the bathroom and destroying your household toilet paper budget. Your GI tract is behaving like a swamp. We need to fix the source with high-strength soluble fiber.';
+        couponCode.textContent  = 'FIXMYEXIT';
+      } else if (score <= 79) {
+        setBadge('Unoptimized Cargo', 'var(--grey)');
+        tierStatus.textContent  = 'Status: Unoptimized Flow Rate';
+        feedbackText.textContent = 'Average civilian performance. You are close to clean exits, but still wasting minutes and extra wipes on the Marker aftermath. Your pipeline is laggy. Dumps Daily will consolidate your cargo and secure the Ghost Wipe.';
+        couponCode.textContent  = 'STAYONMISSION';
+      } else {
+        setBadge('Ghost Wipe Certified', 'var(--success)');
+        tierStatus.textContent  = 'Status: Peak Efficiency';
+        feedbackText.textContent = 'Outstanding. You handle business like an engineered machine. You are experiencing the Ghost Wipe on a regular basis. Use Dumps Daily to lock in this standard and defend against backsliding.';
+        couponCode.textContent  = 'GHOSTWIPE';
+      }
+    }
+
+    function setBadge(text, color) {
+      tierBadge.textContent = text;
+      tierBadge.style.background   = color;
+      tierBadge.style.borderColor  = color;
+    }
+
+    function handleEmailSubmit(e) {
+      e.preventDefault();
+      const val = emailInput.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+        formError.textContent = 'Invalid access path. Check your email address.';
+        return;
+      }
+      formError.textContent = '';
+      leadCard.style.opacity = '0';
+      setTimeout(() => {
+        leadCard.style.display = 'none';
+        couponCard.classList.remove('hidden');
+      }, 180);
+    }
+  </script>
+</body>
+</html>
